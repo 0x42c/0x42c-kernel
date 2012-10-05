@@ -4,3 +4,5 @@
 #include <equates.dasm>
 
 #include "boot.dasm"
+#include "hardware.dasm"
+#include "drivers/base.dasm"

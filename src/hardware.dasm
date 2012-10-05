@@ -1,0 +1,5 @@
+; Hardware and driver management for 0x42c-kernel.
+; Licensed with the MIT license.
+
+initDevices:
+    SET PC, POP

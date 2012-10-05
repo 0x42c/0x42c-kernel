@@ -2,4 +2,4 @@
 ; Licensed with the MIT license.
 
 kernelStart:
-    SUB PC, 1
+    JSR initDevices

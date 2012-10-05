@@ -1,0 +1,8 @@
+; Driver base code for 0x42c-kernel.
+; Licensed with the MIT license.
+
+;#include "lem1802.dasm"
+;#include "generickeyboard.dasm"
+;#include "genericclock.dasm"
+;#include "spc2000.dasm"
+;#include "sped3.dasm"
