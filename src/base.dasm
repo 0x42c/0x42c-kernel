@@ -6,3 +6,4 @@
 #include "boot.dasm"
 #include "hardware.dasm"
 #include "drivers/base.dasm"
+#include "util.dasm"
