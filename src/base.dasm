@@ -1,0 +1,6 @@
+; Base assembly file for 0x42c-kernel
+; Licensed with the MIT license.
+
+#include <equates.dasm>
+
+#include "boot.dasm"
