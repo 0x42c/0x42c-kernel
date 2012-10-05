@@ -11,25 +11,27 @@ pushAllRegisters:
     SET PUSH, Z
     SET PUSH, I
     SET PUSH, J
+    
     SET PUSH, A
     ADD SP, 10
-    SET POP, A
-    SUB SP, 12
+    SET A, POP
     SET [.reloc + 1], A
-    SET POP, A
+    SUB SP, 11
+    SET A, POP
 .reloc:
     SET PC, 0xFFFE
     
 popAllRegisters:
     SET A, POP
     SET [.reloc + 1], A
-    SET POP, J
-    SET POP, I
-    SET POP, Z
-    SET POP, Y
-    SET POP, X
-    SET POP, C
-    SET POP, B
-    SET POP, A
+    
+    SET J, POP
+    SET I, POP
+    SET Z, POP
+    SET Y, POP
+    SET X, POP
+    SET C, POP
+    SET B, POP
+    SET A, POP
 .reloc:
     SET PC, 0xFFFE

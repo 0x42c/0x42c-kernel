@@ -1,1 +1,1 @@
-debug\Lettuce.exe --connect LEM1802,GenericClock,GenericKeyboard ../bin/kernel.bin
+debug\Lettuce.exe --connect LEM1802,GenericClock,GenericKeyboard ../bin/kernel.bin ../bin/kernel.lst

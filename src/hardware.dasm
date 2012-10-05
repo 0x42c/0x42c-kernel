@@ -29,6 +29,7 @@ initDevices:
 .loadDriver:
     SET J, POP
     JSR pushAllRegisters
-        JSR [J + 1]
+        SET J, [J + 1]
+        JSR [J]
     JSR popAllRegisters
     SET PC, .continue
