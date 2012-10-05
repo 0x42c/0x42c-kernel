@@ -1,37 +1,3 @@
 ; Various useful routines for 0x42c-kernel.
 ; Licensed with the MIT license.
 
-; Pushes A, B, C, X, Y, Z, I, and J to the stack.
-pushAllRegisters:
-    SET PUSH, A
-    SET PUSH, B
-    SET PUSH, C
-    SET PUSH, X
-    SET PUSH, Y
-    SET PUSH, Z
-    SET PUSH, I
-    SET PUSH, J
-    
-    SET PUSH, A
-    ADD SP, 10
-    SET A, POP
-    SET [.reloc + 1], A
-    SUB SP, 11
-    SET A, POP
-.reloc:
-    SET PC, 0xFFFE
-    
-popAllRegisters:
-    SET A, POP
-    SET [.reloc + 1], A
-    
-    SET J, POP
-    SET I, POP
-    SET Z, POP
-    SET Y, POP
-    SET X, POP
-    SET C, POP
-    SET B, POP
-    SET A, POP
-.reloc:
-    SET PC, 0xFFFE

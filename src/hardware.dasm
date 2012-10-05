@@ -28,8 +28,8 @@ initDevices:
     SET PC, .loop
 .loadDriver:
     SET J, POP
-    JSR pushAllRegisters
+    pushAll()
         SET J, [J + 1]
         JSR [J]
-    JSR popAllRegisters
+    popAll()
     SET PC, .continue

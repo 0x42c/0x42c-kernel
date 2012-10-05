@@ -2,6 +2,7 @@
 ; Licensed with the MIT license.
 
 #include <equates.dasm>
+#include <macros.dasm>
 
 #include "boot.dasm"
 #include "hardware.dasm"
