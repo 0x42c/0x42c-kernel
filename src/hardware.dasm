@@ -2,4 +2,31 @@
 ; Licensed with the MIT license.
 
 initDevices:
-    SET PC, POP
+    ; Get number of devices - 1 in I, driver table in J
+    HWN I
+    SUB I, 1
+.loop:
+    ; Query device
+    HWQ I
+    ; Search for driver
+    SET J, driverTable
+.driverLoop:
+    SET PUSH, J
+        SET J, [J]
+        ; Initialize driver if hardware IDs match
+        IFE [J], A
+            IFE [J + 1], B
+                SET PC, .loadDriver ; TODO: Hardware version check
+    SET J, POP
+.continue:
+    ADD J, 2
+    IFN [J], -1
+        SET PC, .driverLoop
+    SUB I, 1
+    IFE I, -1
+        SET PC, POP
+    SET PC, .loop
+.loadDriver:
+    SET J, POP
+    JSR [J + 1]
+    SET PC, .continue

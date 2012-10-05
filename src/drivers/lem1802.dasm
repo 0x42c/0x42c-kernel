@@ -1,0 +1,11 @@
+; Driver base code for 0x42c-kernel.
+; Licensed with the MIT license.
+
+lem1802info:
+    .dw 0xf615, 0x7349 ; Hardware ID
+    .dw 0x1802 ; Version
+    
+lem1802driver:
+    .dw .init
+.init:
+    SET PC, POP

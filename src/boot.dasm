@@ -3,3 +3,4 @@
 
 kernelStart:
     JSR initDevices
+    SUB PC, 1
