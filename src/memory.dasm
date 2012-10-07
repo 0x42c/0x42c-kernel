@@ -1,0 +1,109 @@
+; Memory management for 0x42c-kernel. Handles allocation.
+; Licensed with the MIT license.
+
+; Formats userspace memory
+kernel_format_userspace:
+    SET [userspace_memory], -1
+    SET [userspace_memory + 1], 0xDFFD ; userspace_memory_end - userspace_memory - 3 ; TODO: Organic bug here?
+    SET [userspace_memory_end], userspace_memory
+    SET PC, POP
+
+; A: Amount of memory to allocate
+alloc_mem:
+    SET B, userspace_memory
+    ; Search for a free section that is large enough
+.loop:
+    IFE [B], -1
+        SET PC, .check_free
+    ADD B, [B + 1]
+    ADD B, 2
+    IFE B, 0
+        SET PC, .none_found
+    SET PC, .loop
+.none_found:
+    SET A, -1
+    SET PC, POP
+.check_free:
+    ADD B, 1
+    IFL A, [B]
+        SET PC, .do_allocate
+    ADD B, [B]
+    ADD B, 1
+    IFE B, 0
+        SET PC, .none_found
+    SET PC, .loop
+.do_allocate:
+    ; thread_id:length:data:header
+    ; A is amount to allocate
+    ; B is at length
+    SET C, [B]
+    SUB C, A ; Set C to updated length of remaining free section
+    SUB C, 3 ; Remove new header from free length
+    SET [B], A ; Set selected section's length
+    SET [B + 0xFFFF], [current_thread_id] ; Set selected section's thread ID
+    ADD B, 1
+    SET PUSH, B ; PUSH the return value (the first byte of the new section)
+        ADD B, [B + 0xFFFF] ; Move B to the end of the allocated section
+        SET [B], PEEK ; Write the header address
+        SUB [B], 2 ; Adjust the written value
+        IFL C, 3
+            SET PC, .finish_gapless ; If the remaining space is too small, fill it in
+        ADD B, 1
+        SET [B], -1 ; Set the free section's ID
+        SET [B + 1], C ; SET the free section's length
+        SET PUSH, B ; PUSH the free section header pointer
+        ADD B, [B + 1] ; Move to free section footer
+        ADD B, 2
+        SET [B], POP ; Write header address
+.finish:
+    SET A, POP
+    SET PC, POP
+.finish_gapless:
+    ADD B, C
+    SET [B], PEEK
+    SET B, PEEK
+    ADD [B + 1], C
+    SET A, POP
+    SET PC, POP
+
+; A: First address of memory to free
+free_mem:
+    SET [A + 0xFFFE], -1 ; Set to free
+    SET B, [A + 0xFFFF] ; Size
+    ; Try to merge foward
+    SET PUSH, A
+    ADD A, B
+    IFE [A + 1], -1
+    SET PC, .merge_foward
+    SET A, POP
+.check_backward:
+    ; Try to merge backward
+    SUB A, 3
+    IFG userspace_memory, A
+    SET PC, POP
+    ; [A] is footer of previous section
+    SET B, [A + 2]
+    SET A, [A]
+    IFE [A], -1
+    SET PC, .merge_backward
+    SET PC, POP
+.merge_foward:
+    ADD A, 2 ; points to next section size
+    ADD B, [A]
+    ADD B, 3 ; Update size of free section
+    SET A, POP
+    SET [A + 0xFFFF], B ; Update size of free section
+    SET PUSH, A
+    ADD A, B
+    SET [A], PEEK
+    SUB [A], 2 ; Update footer
+    SET A, POP
+    SET PC, .check_backward
+.merge_backward: ; [A] is first word of previous header
+    ADD [A + 1], 3 ; Update size
+    ADD [A + 1], B ; Again
+    SET PUSH, A ; Push the address
+    ADD A, [A + 1] ; Add the size
+    ADD A, 2
+    SET [A], POP ; Update footer
+    SET PC, POP; Return
