@@ -21,6 +21,8 @@ kernel_data                 .equ 0x5000
     active_interrupts       .equ 0x5505
 
     next_thread_id          .equ 0x5510
+
+    context_switch_enabled  .equ 0x5520
 kernel_temp                 .equ 0x6000
 kernel_jump_table           .equ 0x7000
 
@@ -29,5 +31,6 @@ userspace_memory_end        .equ 0x0000 ; non-inclusive
 ; Useful values
 null_thread                 .equ -1
 permenant_memory            .equ -2
+max_threads                 .equ 32
 
 context_switch_frequency    .equ 60 ; The target frequency of context switching, in hertz

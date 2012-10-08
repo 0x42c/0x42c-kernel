@@ -1,8 +1,9 @@
 ; Boot code for 0x42c-kernel. Initializes devices and starts OS.
 ; Licensed with the MIT license.
 
-kernelStart:
+kernel_start:
     SET SP, kernel_jump_table ; end of kernel_temp
+    SET [context_switch_enabled], 0 ; Disable context switcher
 
     ; Prepare memory
     JSR kernel_format_userspace
@@ -21,7 +22,14 @@ kernelStart:
     ; Load /bin/init
     ; TODO
 
-    ; Start interrupts and wait for tasker to kick in
-    IAS system_interrupt
+    ; Start tasker
+    IAG A
+    ; IA is set by clock drivers if one is present
+    IFE A, 0
+        SET PC, boot_no_clock
+    SET [context_switch_enabled], 1
     SUB PC, 1
     ; TODO: Call context_switch manually?
+
+boot_no_clock:
+    ; TODO

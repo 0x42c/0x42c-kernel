@@ -19,4 +19,6 @@ genericclock_driver:
     SET B, 60 / context_switch_frequency
     SET A, 0
     HWI I
+    ; Set interrupt
+    IAS system_interrupt
     SET PC, POP
