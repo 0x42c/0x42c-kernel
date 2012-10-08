@@ -1,7 +1,7 @@
 ; Hardware and driver management for 0x42c-kernel.
 ; Licensed with the MIT license.
 
-initDevices:
+init_devices:
     ; Get number of devices - 1 in I, driver table in J
     HWN I
     SUB I, 1
@@ -9,7 +9,7 @@ initDevices:
     ; Query device
     HWQ I
     ; Search for driver
-    SET J, driverTable
+    SET J, driver_table
 .driverLoop:
     SET PUSH, J
         SET J, [J]

@@ -4,8 +4,8 @@
 ; Formats userspace memory
 kernel_format_userspace:
     SET [userspace_memory], -1
-    SET [userspace_memory + 1], 0xDFFD ; userspace_memory_end - userspace_memory - 3 ; TODO: Organic bug here?
-    SET [userspace_memory_end], userspace_memory
+    SET [userspace_memory + 1], (userspace_memory_end - userspace_memory) - 3
+    SET [userspace_memory_end - 1], userspace_memory
     SET PC, POP
 
 ; A: Amount of memory to allocate

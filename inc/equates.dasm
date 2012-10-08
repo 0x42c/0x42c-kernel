@@ -1,2 +1,31 @@
 ; Equates for 0x42c-kernel, defining memory locations and other information.
 ; Licensed with the MIT license.
+
+; All values are subject to change prior to release
+
+; Memory locations
+kernel_exec             .equ 0x0000 ; Executable kernel space
+kernel_data             .equ 0x5000
+    ; Data tables, such as thread lists
+    thread_table        .equ 0x5000
+    library_table       .equ 0x5100
+    signal_table        .equ 0x5200
+    file_table          .equ 0x5300 ; open file handles
+    interrupt_table     .equ 0x5400 ; length: 0x200 words
+    ; Kernel variables
+    current_thread_id   .equ 0x5500
+    active_threads      .equ 0x5501
+    active_libraries    .equ 0x5502
+    pending_signals     .equ 0x5503
+    open_file_handles   .equ 0x5504
+    active_interrupts   .equ 0x5505
+
+    next_thread_id      .equ 0x5510
+    next_interrupt      .equ 0x5511
+kernel_temp             .equ 0x6000
+kernel_jump_table       .equ 0x7000
+
+userspace_memory        .equ 0x8000 ; inclusive
+userspace_memory_end    .equ 0x0000 ; non-inclusive
+; Useful values
+null_thread             .equ -1

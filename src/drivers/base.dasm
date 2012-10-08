@@ -7,6 +7,6 @@
 ;#include "spc2000.dasm"
 ;#include "sped3.dasm"
 
-driverTable:
+driver_table:
     .dw lem1802info, lem1802driver
     .dw 0xFFFF

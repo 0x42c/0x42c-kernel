@@ -2,5 +2,14 @@
 ; Licensed with the MIT license.
 
 kernelStart:
-    JSR initDevices
+    SET SP, kernel_jump_table ; end of kernel_temp
+
+    ; Prepare memory
+    JSR kernel_format_userspace
+    SET [current_thread_id], null_thread
+
+    JSR initialize_interrupts
+
+    ; Initialize devices
+    JSR init_devices
     SUB PC, 1

@@ -1,0 +1,29 @@
+; Interrupt management for 0x42c-kernel.
+; Licensed with the MIT license.
+
+initialize_interrupts:
+    SET [active_interrupts], 0
+    IAS system_interrupt
+    SET PC, POP
+
+; A: handler address
+; Registers an interrupt handler with the system interrupt handler
+; Returns assigned interrupt number in A
+register_interrupt:
+    SET B, interrupt_table
+    SET C, [active_interrupts]
+    ADD C, C ; C *= 2
+    ADD B, C
+    SET [B], A
+    ADD [active_interrupts], 1
+    SET A, [next_interrupt]
+    SET [B + 1], A
+    ADD [next_interrupt], 1
+    SET PC, POP
+
+; System interrupt handler
+system_interrupt:
+    pushAll()
+
+    popAll()
+    SET PC, POP

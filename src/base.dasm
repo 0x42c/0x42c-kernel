@@ -5,7 +5,8 @@
 #include <macros.dasm>
 
 #include "boot.dasm"
-#include "hardware.dasm"
 #include "memory.dasm"
+#include "interrupts.dasm"
+#include "hardware.dasm"
 #include "drivers/base.dasm"
 #include "util.dasm"
