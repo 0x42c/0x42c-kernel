@@ -57,9 +57,8 @@ developers are encouraged to send a pointer to more data in the signal.
 # File List
 
 The file list is a list of active file handles. The file list starts at [file_table] and
-is 0x100 words long. Each entry is 16 words long, allowing for a maximum of 16 active file
-handles. This table is more ambiguously structured, to allow for greater flexibility with
-various storage devices.
+is 0x100 words long. Each entry is 16 words long, allowing for a maximum of 16 active file handles. This table is more ambiguously structured, to allow for greater
+flexibility with various storage devices.
 
     0000: File handle ID
     0001: Owning thread ID
