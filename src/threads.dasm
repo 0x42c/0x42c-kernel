@@ -1,6 +1,7 @@
 ; 0x42c-kernel thread management code.
 ; Licensed with the MIT license.
 
+; Returns the current executing thread ID in A
 get_current_thread_id:
     SET A, [current_thread_index]
     MUL A, 8
@@ -8,8 +9,7 @@ get_current_thread_id:
     SET A, [A]
     SET PC, POP
 
+; Handles context switching for multitasking; should never be called manually
+; Switches context to next thread and returns
 context_switch:
-    IAS 0
-    IAS system_interrupt
-    SUB PC, 1
     SET PC, POP

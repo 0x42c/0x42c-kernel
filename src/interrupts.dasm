@@ -16,13 +16,14 @@ register_interrupt:
         SET [B], A
         ADD [active_interrupts], 1
     SET A, POP
+    ADD A, 1
     SET PC, POP
 
 ; System interrupt handler
 system_interrupt:
     pushAll()
         ; Call interrupt handler
-        ADD A, interrupt_table
+        ADD A, interrupt_table - 1
         JSR [A]
     popAll()
-    SET PC, POP
+    RFI 0
