@@ -24,3 +24,4 @@ kernelStart:
     ; Start interrupts and wait for tasker to kick in
     IAS system_interrupt
     SUB PC, 1
+    ; TODO: Call context_switch manually?
