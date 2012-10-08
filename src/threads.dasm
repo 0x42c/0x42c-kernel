@@ -1,0 +1,15 @@
+; 0x42c-kernel thread management code.
+; Licensed with the MIT license.
+
+get_current_thread_id:
+    SET A, [current_thread_index]
+    MUL A, 8
+    ADD A, thread_table
+    SET A, [A]
+    SET PC, POP
+
+context_switch:
+    IAS 0
+    IAS system_interrupt
+    SUB PC, 1
+    SET PC, POP

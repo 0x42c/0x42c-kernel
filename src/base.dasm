@@ -9,4 +9,5 @@
 #include "interrupts.dasm"
 #include "hardware.dasm"
 #include "drivers/base.dasm"
+#include "threads.dasm"
 #include "util.dasm"

@@ -3,10 +3,22 @@
 
 #include "lem1802.dasm"
 ;#include "generickeyboard.dasm"
-;#include "genericclock.dasm"
+#include "genericclock.dasm"
 ;#include "spc2000.dasm"
 ;#include "sped3.dasm"
 
 driver_table:
     .dw lem1802info, lem1802driver
+    .dw genericclock_info, genericclock_driver
     .dw 0xFFFF
+
+; Driver details:
+; The driver table stores all drivers the kernel is responsible for managing.
+; The first word points to the driver information. This includes the hardware ID, 
+; and version of the driver's target device.
+; The second word points to the driver function table
+; This table is currently very minimal, and may expand in the future:
+;   0000: Address of driver initialization function
+; The driver initialization function is called with the hardware index in I.
+; This function is expected to do any initialization required for this device
+; to operate properly.

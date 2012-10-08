@@ -6,10 +6,20 @@ kernelStart:
 
     ; Prepare memory
     JSR kernel_format_userspace
-    SET [current_thread_id], null_thread
+    SET [current_thread_index], permenant_memory
 
     JSR initialize_interrupts
 
     ; Initialize devices
+    ; If a clock is connected, the driver should set it up for multitasking
     JSR init_devices
+
+    ; Load filesystem
+    ; TODO
+
+    ; Load /bin/init
+    ; TODO
+
+    ; Start interrupts and wait for tasker to kick in
+    IAS system_interrupt
     SUB PC, 1

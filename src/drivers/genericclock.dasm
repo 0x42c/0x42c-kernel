@@ -1,0 +1,22 @@
+; Generic clock driver for 0x42c-kernel.
+; Licensed with the MIT license.
+
+genericclock_info:
+    .dw 0xB402, 0x12D0 ; Hardware ID
+    .dw 1 ; Version
+    
+genericclock_driver:
+    .dw .init
+.init:
+    ; Register context_switch as the interrupt handler
+    SET A, context_switch
+    JSR register_interrupt
+    ; Set the interrupt message
+    SET B, A
+    SET A, 2
+    HWI I
+    ; Set the frequency
+    SET B, 60 / context_switch_frequency
+    SET A, 0
+    HWI I
+    SET PC, POP

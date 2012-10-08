@@ -40,7 +40,10 @@ alloc_mem:
     SUB C, A ; Set C to updated length of remaining free section
     SUB C, 3 ; Remove new header from free length
     SET [B], A ; Set selected section's length
-    SET [B + 0xFFFF], [current_thread_id] ; Set selected section's thread ID
+    SET PUSH, A
+        JSR get_current_thread_id
+        SET [B + 0xFFFF], A ; Set selected section's thread ID
+    SET A, POP
     ADD B, 1
     SET PUSH, B ; PUSH the return value (the first byte of the new section)
         ADD B, [B + 0xFFFF] ; Move B to the end of the allocated section

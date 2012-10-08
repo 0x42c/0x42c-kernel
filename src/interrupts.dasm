@@ -3,27 +3,26 @@
 
 initialize_interrupts:
     SET [active_interrupts], 0
-    IAS system_interrupt
     SET PC, POP
 
 ; A: handler address
 ; Registers an interrupt handler with the system interrupt handler
 ; Returns assigned interrupt number in A
+; TODO: Handle attempts to create more than the maximum allowed number of interrupts
 register_interrupt:
-    SET B, interrupt_table
-    SET C, [active_interrupts]
-    ADD C, C ; C *= 2
-    ADD B, C
-    SET [B], A
-    ADD [active_interrupts], 1
-    SET A, [next_interrupt]
-    SET [B + 1], A
-    ADD [next_interrupt], 1
+    SET B, [active_interrupts]
+    SET PUSH, B
+        ADD B, interrupt_table
+        SET [B], A
+        ADD [active_interrupts], 1
+    SET A, POP
     SET PC, POP
 
 ; System interrupt handler
 system_interrupt:
     pushAll()
-
+        ; Call interrupt handler
+        ADD A, interrupt_table
+        JSR [A]
     popAll()
     SET PC, POP
