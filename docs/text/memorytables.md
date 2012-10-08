@@ -51,7 +51,7 @@ as such:
     0002: Reserved for future use
     0003: Signal
 
-When more complex data than a single word can represent must be send between threads,
+When more complex data than a single word can represent must be sent between threads,
 developers are encouraged to send a pointer to more data in the signal.
 
 # File List
