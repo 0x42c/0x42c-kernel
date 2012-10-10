@@ -7,9 +7,9 @@ the default disk drivers. The kernel does the following:
 2. Check the header to determine the image type.
 
 The header of this disk includes one word to identify the type. These are:
-0x0000: Directly executable boot sector
-0x0001: Full memory image
-0x0002: Filesystem disk
+0x0002: Directly executable boot sector
+0x0003: Full memory image
+0x0004: Filesystem disk
 
 ## Directly executable boot sector
 
@@ -28,7 +28,7 @@ full memory images.
 
 For this type of disk, the header format is as follows:
 
-    0000: Type ID (0x0002 for filesystem disk)
+    0000: Type ID (0x0003 for filesystem disk)
     0001: Zero-delimited string of first file to execute (usually /bin/init)
     nnnn: Relocation table for following 0x42c-kernel file stream driver
     nnnn: File stream driver
