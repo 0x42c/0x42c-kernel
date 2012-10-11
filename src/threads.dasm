@@ -13,14 +13,14 @@ get_current_thread_id:
 ; Thread begins after next context switch
 ; Returns thread ID in A, or -1 if thread creation failed.
 start_thread:
-	SET [context_switch_enabled], 0
+    SET [context_switch_enabled], 0
     SET PUSH, A
 
-	SET C, [active_threads]
-	IFE C, max_threads
-		SET PC, .max_threads_reached
-	MUL C, 8
-	ADD C, thread_table
+    SET C, [active_threads]
+    IFE C, max_threads
+        SET PC, .max_threads_reached
+    MUL C, 8
+    ADD C, thread_table
 
     ; Allocate the stack memory
     SET A, B
@@ -37,17 +37,17 @@ start_thread:
     SET [C + 0x0006], 0 ; Reserved
     SET [C + 0x0007], 0 ; Reserved
 
-	SET [context_switch_enabled], 1
+    SET [context_switch_enabled], 1
     SET A, [active_threads]
-	SET PC, POP
+    SET PC, POP
 .max_threads_reached:
-	SET [context_switch_enabled], 1
-	SET A, -1
-	SET PC, POP
+    SET [context_switch_enabled], 1
+    SET A, -1
+    SET PC, POP
 
 ; Handles context switching for multitasking; should never be called manually
 ; Switches context to next thread and returns
 context_switch:
-	IFE [context_switch_enabled], 0
-    	SET PC, POP
-	SET PC, POP
+    IFE [context_switch_enabled], 0
+        SET PC, POP
+    SET PC, POP
