@@ -3,10 +3,15 @@
 
 ; Returns the current executing thread ID in A
 get_current_thread_id:
+    IFE [current_thread_index], 0xFFFE
+        SET PC, .new_thread
     SET A, [current_thread_index]
     MUL A, 8
     ADD A, thread_table
     SET A, [A]
+    SET PC, POP
+.new_thread:
+    SET A, [active_threads] ; TODO: This is a bad value for the new thread ID
     SET PC, POP
 
 kill_current_thread:
@@ -34,7 +39,10 @@ start_thread:
     SET PUSH, A
     
     SET PUSH, C
+    SET PUSH, [current_thread_index]
+        SET [current_thread_index], 0xFFFE ; special value used by get_current_thread_id
         JSR alloc_mem
+    SET [current_thread_index], POP
     SET C, POP
         
     ADD A, POP ; Move stack pointer to end of stack
