@@ -42,7 +42,7 @@ start_thread:
     SUB A, 10 ; Move stack pointer to allow space for registers
     SET PUSH, A
 
-    SET [C + 0x0000], [active_threads] ; ID
+    SET [C + 0x0000], [active_threads] ; ID ; TODO: Pull this from elsewhere, active_threads isn't a good ID
     SET [C + 0x0002], POP ; Stack pointer 
     SET [C + 0x0001], POP ; Pointer to thread
     SET [C + 0x0003], POP ; Thread flags
