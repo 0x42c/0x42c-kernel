@@ -26,20 +26,31 @@ kernel_start:
     SET B, 50
     SET C, 0
     JSR start_thread
-    SUB PC, 1
+    
+    SET A, test_thread2
+    SET B, 50
+    SET C, 0
+    JSR start_thread
 
     ; Start tasker
+    SET [current_thread_index], -1
     IAG A
     ; IA is set by clock drivers if one is present
     IFE A, 0
         SET PC, boot_no_clock
+    ; Simulate interrupt and hit the context switch to fire up the OS
+    IAQ 1
     SET [context_switch_enabled], 1
-    SUB PC, 1
-    ; TODO: Call context_switch manually?
+    SET PUSH, system_interrupt_return
+    SET PC, context_switch_next_thread
 
 boot_no_clock:
     ; TODO
     
 test_thread:
     ADD A, 1
-    SUB PC, 1
+    SET PC, test_thread
+    
+test_thread2:
+    ADD B, 1
+    SET PC, test_thread2

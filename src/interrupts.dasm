@@ -21,9 +21,16 @@ register_interrupt:
 
 ; System interrupt handler
 system_interrupt:
-    pushAll()
+    SET PUSH, B \ SET PUSH, C
+    SET PUSH, X \ SET PUSH, Y \ SET PUSH, Z
+    SET PUSH, I \ SET PUSH, J
+    SET PUSH, EX
         ; Call interrupt handler
         ADD A, interrupt_table - 1
         JSR [A]
-    popAll()
-    RFI 0
+system_interrupt_return:
+    SET EX, POP
+    SET J, POP \ SET I, POP
+    SET Z, POP \ SET Y, POP \ SET X, POP
+    SET C, POP \ SET B, POP
+    RFI 0 ; SET A, POP \ SET PC, POP

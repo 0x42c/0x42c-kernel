@@ -11,7 +11,7 @@ get_current_thread_id:
     SET A, [A]
     SET PC, POP
 .new_thread:
-    SET A, [active_threads] ; TODO: This is a bad value for the new thread ID
+    SET A, [next_thread_id]
     SET PC, POP
 
 kill_current_thread:
@@ -20,6 +20,7 @@ kill_current_thread:
 ; A: Pointer to thread; B: Stack size; C: Thread flags
 ; Thread begins after next context switch
 ; Returns thread ID in A, or -1 if thread creation failed.
+.equ required_system_stack 16 ; Minimum is 11, 16 is nice and round
 start_thread:
     SET PUSH, [context_switch_enabled] ; Back up current context switch state
     SET [context_switch_enabled], 0
@@ -34,8 +35,8 @@ start_thread:
 
     ; Allocate the stack memory
     SET A, B
-    IFL A, 0xFFFF - 10
-        ADD A, 10 ; Required system stack for context switching and other tasks
+    IFL A, 0xFFFF - required_system_stack
+        ADD A, required_system_stack ; Required system stack for context switching and other tasks
     SET PUSH, A
     
     SET PUSH, C
@@ -44,23 +45,27 @@ start_thread:
         JSR alloc_mem
     SET [current_thread_index], POP
     SET C, POP
-        
+    
     ADD A, POP ; Move stack pointer to end of stack
-    SET [A], kill_current_thread ; Set return point
+    SUB A, 2
+    SET [A], PEEK ; Set return point
+    SET [A + 1], kill_current_thread
     SUB A, 10 ; Move stack pointer to allow space for registers
+    SET [A], system_interrupt_return
     SET PUSH, A
 
-    SET [C + 0x0000], [active_threads] ; ID ; TODO: Pull this from elsewhere, active_threads isn't a good ID
+    SET [C + 0x0000], [next_thread_id] ; ID
     SET [C + 0x0002], POP ; Stack pointer 
     SET [C + 0x0001], POP ; Pointer to thread
     SET [C + 0x0003], POP ; Thread flags
     SET [C + 0x0004], 0xffff ; TODO: File path
     SET [C + 0x0005], 0 ; TODO: Parent
-    ;SET [C + 0x0006], 0 ; Reserved for future use
-    ;SET [C + 0x0007], 0 ; Reserved for future use
+   ;SET [C + 0x0006], 0 ; Reserved for future use
+   ;SET [C + 0x0007], 0 ; Reserved for future use
 
-    SET A, [active_threads]
+    SET A, [next_thread_id]
     ADD [active_threads], 1
+    JSR find_next_thread_id
     SET [context_switch_enabled], POP
     SET PC, POP
 .max_threads_reached:
@@ -68,10 +73,33 @@ start_thread:
     SET [context_switch_enabled], POP
     SET A, -1
     SET PC, POP
+    
+find_next_thread_id:
+    ADD [next_thread_id], 1 ; TODO: Ensure this ID isn't in use
+    SET PC, POP
 
 ; Handles context switching for multitasking; should never be called manually
 ; Switches context to next thread and returns
 context_switch:
     IFE [context_switch_enabled], 0
         SET PC, POP
+    ; Back up stack pointer
+    SET A, [current_thread_index]
+    MUL A, 8
+    ADD A, thread_table + 2 ; Stack pointer address
+    
+    SET [A], SP
+
+context_switch_next_thread:
+    ; TODO: Suspended threads
+    SET A, [current_thread_index]
+    ADD A, 1
+    IFE A, [active_threads]
+        SET A, 0
+    SET [current_thread_index], A
+    
+    ; Set new stack pointer and return
+    MUL A, 8
+    ADD A, thread_table + 2
+    SET SP, [A]
     SET PC, POP
