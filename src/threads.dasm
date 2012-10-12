@@ -9,11 +9,16 @@ get_current_thread_id:
     SET A, [A]
     SET PC, POP
 
-; A: Pointer to thread; B: Stack size
+kill_current_thread:
+    SUB PC, 1 ; TODO
+
+; A: Pointer to thread; B: Stack size; C: Thread flags
 ; Thread begins after next context switch
 ; Returns thread ID in A, or -1 if thread creation failed.
 start_thread:
+    SET PUSH, [context_switch_enabled] ; Back up current context switch state
     SET [context_switch_enabled], 0
+    SET PUSH, C
     SET PUSH, A
 
     SET C, [active_threads]
@@ -24,24 +29,35 @@ start_thread:
 
     ; Allocate the stack memory
     SET A, B
-    JSR alloc_mem
+    IFL A, 0xFFFF - 10
+        ADD A, 10 ; Required system stack for context switching and other tasks
+    SET PUSH, A
+    
+    SET PUSH, C
+        JSR alloc_mem
+    SET C, POP
+        
+    ADD A, POP ; Move stack pointer to end of stack
+    SET [A], kill_current_thread ; Set return point
+    SUB A, 10 ; Move stack pointer to allow space for registers
     SET PUSH, A
 
-    ADD [active_threads], 1
     SET [C + 0x0000], [active_threads] ; ID
     SET [C + 0x0002], POP ; Stack pointer 
     SET [C + 0x0001], POP ; Pointer to thread
-    SET [C + 0x0003], 0 ; TODO: Flags
+    SET [C + 0x0003], POP ; Thread flags
     SET [C + 0x0004], 0xffff ; TODO: File path
     SET [C + 0x0005], 0 ; TODO: Parent
-    SET [C + 0x0006], 0 ; Reserved
-    SET [C + 0x0007], 0 ; Reserved
+    ;SET [C + 0x0006], 0 ; Reserved for future use
+    ;SET [C + 0x0007], 0 ; Reserved for future use
 
-    SET [context_switch_enabled], 1
     SET A, [active_threads]
+    ADD [active_threads], 1
+    SET [context_switch_enabled], POP
     SET PC, POP
 .max_threads_reached:
-    SET [context_switch_enabled], 1
+    ADD SP, 2 ; POP / POP
+    SET [context_switch_enabled], POP
     SET A, -1
     SET PC, POP
 

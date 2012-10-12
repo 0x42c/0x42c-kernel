@@ -21,6 +21,12 @@ kernel_start:
 
     ; Load /bin/init
     ; TODO
+    
+    SET A, test_thread
+    SET B, 50
+    SET C, 0
+    JSR start_thread
+    SUB PC, 1
 
     ; Start tasker
     IAG A
@@ -33,3 +39,7 @@ kernel_start:
 
 boot_no_clock:
     ; TODO
+    
+test_thread:
+    ADD A, 1
+    SUB PC, 1
