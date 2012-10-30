@@ -23,6 +23,7 @@ kernel_data                 .equ 0x5000
     next_thread_id          .equ 0x5510
 
     context_switch_enabled  .equ 0x5520
+kernel_disk_buffer          .equ 0x5E00 ; 512 words
 kernel_temp                 .equ 0x6000
 kernel_jump_table           .equ 0x7000
 
