@@ -127,11 +127,11 @@ The reccomended use for this filesystem is with unix-style paths and naming. To 
 
 ## Defragmenting
 
-Each time either section crosses a 0x1000 word boundary, a mandatory defragmentation should
-be triggered. In other words, with `last_address % 0x1000 > current_address % 1000`, trigger
+Each time either section crosses a 0x200 word boundary (one sector), a mandatory defragmentation
+should be triggered. In other words, with `last_address % 0x200 > current_address % 0x200`, trigger
 a defragment. This may be optionally suspended in certain scenarios, but the filesystem cannot
-ignore defragmentation eternally. At the maximum, every 0x2000 word boundary should trigger a
-degragmentation.
+ignore defragmentation eternally. At the maximum, every 0x1000 word boundary (8 sectors) should
+trigger a degragmentation.
 
 A defragmentation is simple - the process should remove all deleted entries from the allocation
 table, and all unused data section entries, and update the corresponding file entries.
