@@ -123,8 +123,7 @@ The reccomended use for this filesystem is with unix-style paths and naming. To 
 * All paths are relative. In a given context, `example/` may refer to `/etc/example/`, or 
   `/bin/example`, and so on. To "root" a path, prepend a forward slash (`/`).
 * The following regular expression matches all valid file and directive names:
-  `[A-Za-z0-9_ .()-]`.
-* All file and directory names are limited to 256 characters.
+  `[A-Za-z0-9_ .()-]{1-256}`.
 
 ## Defragmenting
 
