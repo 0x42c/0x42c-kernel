@@ -6,7 +6,7 @@ built on 0x42c-kernel. Tools for using it are distributed along with 0x42c itsel
 ## Disk Structure
 
 The first sector (subject to change) of the disk is the metadata, as described in the
-boot-to-disk documentation. The f2c-fs driver may be found in src/f2c-fs/, though you
+boot-to-disk documentation. The f2c-fs driver may be found in `src/f2c-fs/`, though you
 are welcome to provide your own.
 
 The second sector of the disk is the start of the data section. The data section
