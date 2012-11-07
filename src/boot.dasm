@@ -8,7 +8,7 @@ kernel_start:
     ; Prepare memory
     JSR kernel_format_userspace
     ; Any memory allocated during boot up is presumed to be permenant (critical system drivers, etc)
-    SET [current_thread_index], permenant_memory
+    SET [current_thread_index], permanent_memory
 
     JSR initialize_interrupts
 

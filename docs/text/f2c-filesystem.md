@@ -6,7 +6,7 @@ built on 0x42c-kernel. Tools for using it are distributed along with 0x42c itsel
 ## Disk Structure
 
 The first sector (subject to change) of the disk is the metadata, as described in the
-boot-to-disk documentation. The f2c-fs driver may be found in src/f2c-fs/, though you
+boot-to-disk documentation. The f2c-fs driver may be found in `src/f2c-fs/`, though you
 are welcome to provide your own.
 
 The second sector of the disk is the start of the data section. The data section
@@ -123,16 +123,15 @@ The reccomended use for this filesystem is with unix-style paths and naming. To 
 * All paths are relative. In a given context, `example/` may refer to `/etc/example/`, or 
   `/bin/example`, and so on. To "root" a path, prepend a forward slash (`/`).
 * The following regular expression matches all valid file and directive names:
-  `[A-Za-z0-9_ .()-]`.
-* All file and directory names are limited to 256 characters.
+  `[A-Za-z0-9_ .()-]{1,256}`.
 
 ## Defragmenting
 
-Each time either section crosses a 0x1000 word boundary, a mandatory defragmentation should
-be triggered. In other words, with `last_address % 0x1000 > current_address % 1000`, trigger
+Each time either section crosses a 0x200 word boundary (one sector), a mandatory defragmentation
+should be triggered. In other words, with `last_address % 0x200 > current_address % 0x200`, trigger
 a defragment. This may be optionally suspended in certain scenarios, but the filesystem cannot
-ignore defragmentation eternally. At the maximum, every 0x2000 word boundary should trigger a
-degragmentation.
+ignore defragmentation eternally. At the maximum, every 0x1000 word boundary (8 sectors) should
+trigger a degragmentation.
 
 A defragmentation is simple - the process should remove all deleted entries from the allocation
 table, and all unused data section entries, and update the corresponding file entries.

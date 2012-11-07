@@ -31,7 +31,7 @@ userspace_memory            .equ 0x8000 ; inclusive
 userspace_memory_end        .equ 0x0000 ; non-inclusive
 ; Useful values
 null_thread                 .equ -1
-permenant_memory            .equ -2
+permanent_memory            .equ -2
 max_threads                 .equ 32
 
 context_switch_frequency    .equ 60 ; The target frequency of context switching, in hertz
