@@ -1,0 +1,1 @@
+D:\dev\0x42c\0x42c-kernel\tools\disk-img\organicbot\bin\Debug\organicbot.exe.config

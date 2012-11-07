@@ -1,0 +1,7 @@
+D:\dev\0x42c\0x42c-kernel\tools\disk-img\diskimg\bin\Debug\diskimg.exe.config
+D:\dev\0x42c\0x42c-kernel\tools\disk-img\bin\Debug\diskimg.exe.config
+D:\dev\0x42c\0x42c-kernel\tools\disk-img\obj\Debug\diskimg.csprojResolveAssemblyReference.cache
+D:\dev\0x42c\0x42c-kernel\tools\disk-img\bin\Debug\diskimg.exe
+D:\dev\0x42c\0x42c-kernel\tools\disk-img\bin\Debug\diskimg.pdb
+D:\dev\0x42c\0x42c-kernel\tools\disk-img\obj\Debug\diskimg.exe
+D:\dev\0x42c\0x42c-kernel\tools\disk-img\obj\Debug\diskimg.pdb
