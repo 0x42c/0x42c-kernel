@@ -81,10 +81,10 @@ File entries represent links to data in the data section, as well as file metada
     0x0000: Parent directory ID
     0x0001: Flags (bit mask)
         00-15: [Reserved for future use]
-    0x0003: Pointer to data section entry
-    0x0004: 32-bit file length
-    0x0006: Length of name
-    0x0007: Name (ASCII, no delimiter)
+    0x0002: Pointer to data section entry
+    0x0003: 32-bit file length
+    0x0005: Length of name
+    0x0006: Name (ASCII, no delimiter)
 
 ### Symbolic link
 
