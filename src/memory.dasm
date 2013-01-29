@@ -16,7 +16,7 @@ alloc_mem:
     IFE [B], -1
         SET PC, .check_free
     ADD B, [B + 1]
-    ADD B, 2
+    ADD B, 3
     IFE B, 0
         SET PC, .none_found
     SET PC, .loop
@@ -28,7 +28,7 @@ alloc_mem:
     IFL A, [B]
         SET PC, .do_allocate
     ADD B, [B]
-    ADD B, 1
+    ADD B, 2
     IFE B, 0
         SET PC, .none_found
     SET PC, .loop
@@ -77,18 +77,18 @@ free_mem:
     SET PUSH, A
     ADD A, B
     IFE [A + 1], -1
-    SET PC, .merge_foward
+        SET PC, .merge_foward
     SET A, POP
 .check_backward:
     ; Try to merge backward
     SUB A, 3
     IFG userspace_memory, A
-    SET PC, POP
+        SET PC, POP
     ; [A] is footer of previous section
     SET B, [A + 2]
     SET A, [A]
     IFE [A], -1
-    SET PC, .merge_backward
+        SET PC, .merge_backward
     SET PC, POP
 .merge_foward:
     ADD A, 2 ; points to next section size
