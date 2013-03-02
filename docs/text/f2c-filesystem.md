@@ -33,8 +33,9 @@ The blob size and flags are used when allocating space for new files.
 
 *All formatting information described in this section is backwards.*
 
-The allocation table starts at the final word of the disk, and moves towards 0. It
-consists of several entries, which are structured as follows:
+The allocation table starts at the final word of the disk, and moves towards 0. It starts
+with the magic number `0x0F2C`. Following that are several entries, which are
+structured as follows:
 
     0x0000: Entry type
     0x0001: Entry length
